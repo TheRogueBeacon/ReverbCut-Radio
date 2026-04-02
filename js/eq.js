@@ -142,24 +142,9 @@ audioEl.addEventListener('playing', () => {
 });
 
 btn.addEventListener('click', async () => {
-  try {
-    initAudioGraph();
-    await audioCtx.resume();
-    
-    if (!started) {
-      await audioEl.play();
-      started = true;
-    } else if (audioEl.paused) {
-      await audioEl.play();
-    }
-
-    lowPassEntranceSweep();
-    frame.classList.add('eq-active');
-    btn.classList.add('cta-pulse');
-    setTimeout(() => btn.classList.remove('cta-pulse'), 700);
-  } catch (e) {
-    console.warn('Playback blocked:', e);
-  }
+  const audio = document.getElementById('audio');
+  await audio.play();
+  console.log('done');
 });
 
 
