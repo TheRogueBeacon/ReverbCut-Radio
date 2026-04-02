@@ -144,6 +144,11 @@ body {
   animation: blink 1.2s infinite;
 }
 
+.hero-title,
+.hero-subtitle {
+  color: #b026ff;
+}
+
 @keyframes blink {
   0%, 50% { opacity: 1; }
   51%, 100% { opacity: 0; }
@@ -161,6 +166,7 @@ body {
     inset 0 0 12px rgba(0, 255, 255, 0.15),
     0 0 18px rgba(0, 255, 255, 0.25);
 }
+
 
 
 .frame {
@@ -197,9 +203,16 @@ body {
 .eq-shell {
   position: relative;
   width: 100%;
-  height: 100px;
+  height: 120px;
   margin-bottom: 18px;
   overflow: hidden;
+}
+
+/* Hero EQ canvas sizing */
+#eq-visualizer {
+  width: 100%;
+  height: 120px; /* adjust to taste */
+  display: block;
 }
 
 #eqCanvas {
