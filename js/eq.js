@@ -16,11 +16,14 @@ let started = false;
 let eqActive = false;
 
 function resizeCanvas() {
-  eqCanvas.width = eqShell.clientWidth;
-  eqCanvas.height = eqShell.clientHeight;
+  // Wait for layout to stabilize
+  requestAnimationFrame(() => {
+    eqCanvas.width = eqShell.clientWidth;
+    eqCanvas.height = eqShell.clientHeight;
 
-  heroEQ.width = heroEQ.clientWidth;
-  heroEQ.height = heroEQ.clientHeight;
+    heroEQ.width = heroEQ.clientWidth;
+    heroEQ.height = heroEQ.clientHeight;
+  });
 }
 
 window.addEventListener('resize', resizeCanvas);
@@ -141,6 +144,8 @@ audioEl.addEventListener('playing', () => {
 btn.addEventListener('click', async () => {
   try {
     initAudioGraph();
+    audioEl.load(); // ⭐ THIS IS THE FIX
+
     if (!started) {
       await audioEl.play();
       started = true;
@@ -156,6 +161,7 @@ btn.addEventListener('click', async () => {
     console.warn('Playback blocked:', e);
   }
 });
+
 
 
 drawEQ();
