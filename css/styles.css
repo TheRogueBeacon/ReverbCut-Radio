@@ -22,6 +22,37 @@ html, body {
   overflow-y: auto;
 }
 
+/* === BACKGROUND TEXTURES RESTORED === */
+
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+
+  /* Subtle cyberpunk grid */
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px;
+  opacity: 0.25;
+}
+
+/* Noise layer */
+.grid-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+
+  /* Pure CSS noise */
+  background-image: 
+    repeating-radial-gradient(circle, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 100%);
+  background-size: 3px 3px;
+}
+
 body {
   display: block;
 }
@@ -146,7 +177,7 @@ body {
   font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--text-soft);
+  color: #b026ff; /* Purple Rain */
   margin-bottom: 4px;
 }
 
@@ -154,6 +185,13 @@ body {
   font-size: 0.9rem;
   color: var(--text-soft);
   margin-bottom: 22px;
+}
+
+/* Purple Rain identity color */
+.tagline,
+.meta-row span,
+.label {
+  color: #b026ff;
 }
 
 .eq-shell {
