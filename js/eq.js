@@ -144,6 +144,7 @@ audioEl.addEventListener('playing', () => {
 btn.addEventListener('click', async () => {
   try {
     initAudioGraph();
+    await audioCtx.resume();
     
     if (!started) {
       await audioEl.play();
