@@ -119,14 +119,29 @@ body {
 }
 
 .hero-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 3rem;
-  letter-spacing: 4px;
-  color: #ffffff;
-  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.12); /* barely-there ink */
   text-shadow:
-    0 0 8px rgba(0, 255, 255, 0.4),
-    0 0 16px rgba(0, 255, 255, 0.2);
+    0 0 18px rgba(0, 0, 0, 0.9),   /* deep void halo */
+    0 0 32px rgba(0, 0, 0, 0.8),   /* extended shadow bloom */
+    0 0 2px rgba(255, 255, 255, 0.05); /* faint inner whisper */
+  letter-spacing: 0.02em;
+  filter: blur(0.2px); /* subtle atmospheric diffusion */
+}
+
+.hero-title.shadow-pulse {
+  animation: shadowPulse 6s ease-in-out infinite;
+}
+
+@keyframes shadowPulse {
+  0% {
+    text-shadow: 0 0 18px rgba(0,0,0,0.9), 0 0 32px rgba(0,0,0,0.8);
+  }
+  50% {
+    text-shadow: 0 0 26px rgba(0,0,0,1), 0 0 42px rgba(0,0,0,0.9);
+  }
+  100% {
+    text-shadow: 0 0 18px rgba(0,0,0,0.9), 0 0 32px rgba(0,0,0,0.8);
+  }
 }
 
 .hero-subtitle {

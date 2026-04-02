@@ -142,7 +142,16 @@ audioEl.addEventListener('playing', () => {
 });
 
 btn.addEventListener('click', async () => {
-  alert('clicked');
+  try {
+    initAudioGraph();
+    await audioCtx.resume();
+    audioEl.load();
+    await audioEl.play();
+    started = true;
+    lowPassEntranceSweep();
+  } catch (e) {
+    console.warn('Playback blocked:', e);
+  }
 });
 
 drawEQ();
