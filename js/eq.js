@@ -61,7 +61,7 @@ function drawBars(ctx, width, height) {
   for (let i = 0; i < barCount; i++) {
     const value = dataArray[i * step] || 0;
     const norm = value / 255;
-    const barHeight = norm * height * 0.6;
+    const barHeight = norm * height * 2.5;
 
     const x = i * barWidth;
     const y = height / 2;
