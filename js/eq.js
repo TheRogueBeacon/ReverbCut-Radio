@@ -7,6 +7,8 @@ const signalInterrupt = document.getElementById('signalInterrupt');
 const signalTrace = document.getElementById('signalTrace');
 const listenerGhost = document.getElementById('listenerGhost');
 const frame = document.getElementById('frame');
+const heroEQ = document.getElementById('eq-visualizer');
+
 
 let audioCtx, sourceNode, analyser, filterNode;
 let dataArray, bufferLength;
@@ -16,25 +18,25 @@ let eqActive = false;
 function resizeCanvas() {
   eqCanvas.width = eqShell.clientWidth;
   eqCanvas.height = eqShell.clientHeight;
+
+  heroEQ.width = heroEQ.clientWidth;
+  heroEQ.height = heroEQ.clientHeight;
 }
+
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 function initAudioGraph() {
   if (audioCtx) return;
-
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   sourceNode = audioCtx.createMediaElementSource(audioEl);
-
   analyser = audioCtx.createAnalyser();
   analyser.fftSize = 256;
   bufferLength = analyser.frequencyBinCount;
   dataArray = new Uint8Array(bufferLength);
-
   filterNode = audioCtx.createBiquadFilter();
   filterNode.type = 'lowpass';
   filterNode.frequency.setValueAtTime(400, audioCtx.currentTime);
-
   sourceNode.connect(filterNode);
   filterNode.connect(analyser);
   analyser.connect(audioCtx.destination);
@@ -48,47 +50,57 @@ function lowPassEntranceSweep() {
   filterNode.frequency.linearRampToValueAtTime(18000, now + 0.5);
 }
 
+function drawBars(ctx, width, height) {
+  const barCount = 64;
+  const step = Math.floor(bufferLength / barCount);
+  const barWidth = width / barCount;
+
+  for (let i = 0; i < barCount; i++) {
+    const value = dataArray[i * step] || 0;
+    const norm = value / 255;
+    const barHeight = norm * height * 0.6;
+
+    const x = i * barWidth;
+    const y = height / 2;
+
+    const gradient = ctx.createLinearGradient(x, y - barHeight, x, y + barHeight);
+    gradient.addColorStop(0, 'rgba(168, 85, 255, 0)');
+    gradient.addColorStop(0.5, 'rgba(168, 85, 255, 0.8)');
+    gradient.addColorStop(1, 'rgba(168, 85, 255, 0)');
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x, y - barHeight, barWidth * 0.8, barHeight * 2);
+  }
+}
+
 function drawEQ() {
   if (!analyser) return;
-  const ctx = eqCanvas.getContext('2d');
-  const width = eqCanvas.width;
-  const height = eqCanvas.height;
+
+  const ctx1 = eqCanvas.getContext('2d');
+  const ctx2 = heroEQ.getContext('2d');
 
   function render() {
     requestAnimationFrame(render);
+
     if (!eqActive) {
-      ctx.clearRect(0, 0, width, height);
+      ctx1.clearRect(0, 0, eqCanvas.width, eqCanvas.height);
+      ctx2.clearRect(0, 0, heroEQ.width, heroEQ.height);
       return;
     }
 
     analyser.getByteFrequencyData(dataArray);
+    console.log(dataArray[10]);
 
-    ctx.clearRect(0, 0, width, height);
+    ctx1.clearRect(0, 0, eqCanvas.width, eqCanvas.height);
+    ctx2.clearRect(0, 0, heroEQ.width, heroEQ.height);
 
-    const barCount = 64;
-    const step = Math.floor(bufferLength / barCount);
-    const barWidth = width / barCount;
-
-    for (let i = 0; i < barCount; i++) {
-      const value = dataArray[i * step] || 0;
-      const norm = value / 255;
-      const barHeight = norm * height * 0.6;
-
-      const x = i * barWidth;
-      const y = height / 2;
-
-      const gradient = ctx.createLinearGradient(x, y - barHeight, x, y + barHeight);
-      gradient.addColorStop(0, 'rgba(168, 85, 255, 0)');
-      gradient.addColorStop(0.5, 'rgba(168, 85, 255, 0.8)');
-      gradient.addColorStop(1, 'rgba(168, 85, 255, 0)');
-
-      ctx.fillStyle = gradient;
-      ctx.fillRect(x, y - barHeight, barWidth * 0.8, barHeight * 2);
-    }
+    drawBars(ctx1, eqCanvas.width, eqCanvas.height);
+    drawBars(ctx2, heroEQ.width, heroEQ.height);
   }
 
   render();
 }
+
 
 function updateProgress() {
   if (!audioEl.duration || !isFinite(audioEl.duration)) {
@@ -144,6 +156,7 @@ btn.addEventListener('click', async () => {
     console.warn('Playback blocked:', e);
   }
 });
+
 
 drawEQ();
 updateProgress();
