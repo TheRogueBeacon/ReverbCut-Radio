@@ -142,12 +142,8 @@ audioEl.addEventListener('playing', () => {
 });
 
 btn.addEventListener('click', async () => {
-  const audio = document.getElementById('audio');
-  await audio.play();
-  console.log('done');
+  alert('clicked');
 });
-
-
 
 drawEQ();
 updateProgress();
