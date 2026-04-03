@@ -135,10 +135,12 @@ audioEl.addEventListener('error', () => {
   eqActive = false;
 });
 
-audioEl.addEventListener('playing', () => {
-  signalInterrupt.classList.remove('visible');
-  eqActive = true;
-  document.title = 'ReverbCut Radio // Live';
+['playing', 'canplay', 'canplaythrough'].forEach(evt => {
+  audioEl.addEventListener(evt, () => {
+    signalInterrupt.classList.remove('visible');
+    eqActive = true;
+    document.title = 'ReverbCut Radio // Live';
+  });
 });
 
 btn.addEventListener('click', async () => {
