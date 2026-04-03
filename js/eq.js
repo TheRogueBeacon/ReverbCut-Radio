@@ -143,9 +143,9 @@ audioEl.addEventListener('playing', () => {
 
 btn.addEventListener('click', async () => {
   try {
+    audioEl.load();
     initAudioGraph();
     await audioCtx.resume();
-    audioEl.load();
     await audioEl.play();
     started = true;
     lowPassEntranceSweep();
