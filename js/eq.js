@@ -151,10 +151,10 @@ btn.addEventListener('click', async () => {
     await audioEl.play();
     started = true;
     lowPassEntranceSweep();
+    drawEQ();
   } catch (e) {
     console.warn('Playback blocked:', e);
   }
 });
 
-drawEQ();
 updateProgress();
