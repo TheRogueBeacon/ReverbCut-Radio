@@ -122,13 +122,16 @@ function updateSignalTrace() {
 }
 setInterval(updateSignalTrace, 1200);
 
-// Placeholder listener ghost
-let ghostCount = 1;
-setInterval(() => {
-  const delta = Math.random() > 0.7 ? (Math.random() > 0.5 ? 1 : -1) : 0;
-  ghostCount = Math.max(1, ghostCount + delta);
-  listenerGhost.textContent = ghostCount;
+setInterval(async () => {
+  try {
+    const res = await fetch('/api/listeners');
+    const data = await res.json();
+    listenerGhost.textContent = data.count ?? '—';
+  } catch (e) {
+    listenerGhost.textContent = '—';
+  }
 }, 5000);
+
 
 audioEl.addEventListener('error', () => {
   signalInterrupt.classList.add('visible');
